@@ -1,4 +1,4 @@
-
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -6,37 +6,30 @@
 
 int main()
 {
-    int pid;
+    int i, pid;
 
-    for (int i = 1; i <= 5; i++)
+    for(i = 0; i < 5; i++)
     {
         pid = fork();
 
-        if (pid < 0)
+        if(pid < 0)
         {
-            printf("Fork error!\n");
-            exit(1);
+            printf("Fork failed\n");
+            return 1;
         }
-
-        if (pid == 0)
+        else if(pid == 0)
         {
-            printf("Forked child process %d, running with pid = %d\n",
-                   i, getpid());
-
-            sleep(2);
+            printf("Child %d: Process ID = %d\n", i+1, getpid());
             exit(0);
         }
     }
 
-    printf("Parent process executing, waiting for the children to finish\n");
-
-    // Wait for all 5 child processes
-    for (int i = 1; i <= 5; i++)
+    for(i = 0; i < 5; i++)
     {
         wait(NULL);
     }
 
-    printf("All child processes finished, parent continues\n");
+    printf("Parent process: All children have finished.\n");
 
     return 0;
 }
